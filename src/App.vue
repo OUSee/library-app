@@ -1,6 +1,6 @@
 <script setup lang="ts">
 
-import { onMounted, ref, watchEffect } from 'vue';
+import { onMounted, ref, watch, watchEffect } from 'vue';
 import Head from './components/Head.vue';
 import Modal from './components/Modal.vue';
 import Book from './components/Book.vue';
@@ -17,7 +17,7 @@ type Book = {
 
 const isLoading = ref(true);
 const isModal = ref(false);
-const Books = ref<Book[]>();
+const Books = ref<Book[]>([]);
 const newBook = ref<Book>({id:1, title:"", author:"", date:"", picture:""  });
 
 
@@ -58,35 +58,25 @@ const setNewBook = (book: Book) => {
 }
 
 const saveChanges = async () => {
-
-  Books.value?.push(newBook.value)
-
-  
-
-  const request = new Request("https://38d67d2cffbadc09.mokky.dev/books", {
-    method: "PATCH",
-    body: JSON.stringify(Books.value),
-  });
-  const response = await fetch(request);
-  if (response.ok) {
-    alert("book saved")
-  }
-  else {
-    alert("something went wrong, try again later"+ response.status)
-  }
+  fetchData();  
 }
-
 
 const closeModal = () => {
   isModal.value = false;
-  console.log("tried to close modal", isModal.value)
+  fetchData();
 }
 
 onMounted(() => {
   fetchData();
 });
 
-watchEffect(() => { fetchData() })
+watch(
+  isModal,
+  async () => {
+    fetchData()
+  },
+  { immediate: true }
+)
 </script>
 
 
@@ -103,7 +93,7 @@ watchEffect(() => { fetchData() })
       <Book v-for="book in Books" :book="book" :onDelete/>
     </ul>
   </div>
-  <Modal v-if="isModal" @close="isModal=false" :lenght="Books?.length" :closeModal :saveChanges :setNewBook />
+  <Modal v-if="isModal" @close="isModal=false" :closeModal :saveChanges :setNewBook />
 </template>
 
 
@@ -118,7 +108,7 @@ watchEffect(() => { fetchData() })
 .list{
   padding: 0;
   display: flex;
-  flex-direction: column;
+  flex-direction: column-reverse;
   gap: 15px;
 }
 .loader{

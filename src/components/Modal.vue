@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref } from 'vue';
+import { ref, watchEffect } from 'vue';
 import saveIcon from "./icons/saveIcon.vue"
 import leaveIcon from './icons/leaveIcon.vue'
 
@@ -45,20 +45,6 @@ const enterLeaveDelete = () => {
     }
 }
 
-const update = () => {
-    const book: Book = {
-        id: lenght.value++,
-        title: title.value,
-        author: author.value,
-        date: date.value,
-        picture: url.value
-    }
-    setNewBook(book)
-   
-
-    alert(book.id + " : " + book.title)
-    saveChanges()
-}
 
 // onMounted(() => {
 //     title.value = book.Name;
@@ -66,31 +52,42 @@ const update = () => {
 //     date.value = book.publishDate;
 //     url.value = book.picture;
 // })
+
+watchEffect(() => {
+ 
+})
 </script>
 
 
 
 <template>
-    <div class="modalWindow">
-        <form action="submit" class="bookForm">
-            <input @change="changeName"  type="text" placeholder="Book Title">
-            <input @change="changeAuthor" type="text" placeholder="Book Author">
-            <input @change="changeDate"  type="text" placeholder="Book publish date">
-            <input @change="changePic"  type="text" placeholder="Image URL">
-            <button @mouseenter="enterLeaveDelete" @mouseleave="enterLeaveDelete" @click="update">
+    <div class="modalWindow">   
+        <form id="form" action="https://38d67d2cffbadc09.mokky.dev/books" method="POST" class="bookForm" >
+            <input name="title" @change="changeName" type="text" placeholder="Book Title">
+            <input name="author" @change="changeAuthor" type="text" placeholder="Book Author">
+            <input name="date" @change="changeDate" type="text" placeholder="Book publish date">
+            <input name="picture" @change="changePic" type="text" placeholder="Image URL">
+            <button type="submit" @mouseenter="enterLeaveDelete" @mouseleave="enterLeaveDelete" @click="saveChanges">
                 <saveIcon width="50px" height="50px" :color="iconColor" />
             </button>
         </form>
-        <button class="leaveButton" @click="closeModal">
+        <button type="reset" class="leaveButton" @click="closeModal">
             <leaveIcon width="50px" height="50px" :color="iconColor" />
         </button>
-        <img v-modal="url" alt="place for the image">
+        <img id="url" src="https://img.recraft.ai/Z5ro2pipsNIByd-JeQYYee5tiB0fivJcO2yA95TYND8/rs:fit:1024:1434:0/q:80/g:no/plain/abs://prod/images/b9d19447-cd39-4494-904e-35e45949cb83@avif" alt="place for the image">
     </div>
 </template>
 
 
 
 <style scoped>
+
+    #url{
+        width: 100px;
+        height: 130px;
+        margin-left: 100px;
+        margin-top: 100px;
+    }
     .modalWindow{
         position: fixed;
         left: 0;
@@ -115,6 +112,8 @@ const update = () => {
         margin-bottom: 10px;
         padding: 5px 10px;
     }
+
+
 
     .leaveButton{
         display: flex;
