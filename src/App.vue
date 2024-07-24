@@ -58,6 +58,7 @@ const setNewBook = (book: Book) => {
 }
 
 const saveChanges = async () => {
+  Books.value = [];
   fetchData();  
 }
 

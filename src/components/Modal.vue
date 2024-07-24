@@ -62,7 +62,7 @@ watchEffect(() => {
 
 <template>
     <div class="modalWindow">   
-        <form id="form" action="https://38d67d2cffbadc09.mokky.dev/books" method="POST" class="bookForm" >
+        <form id="form" action="https://38d67d2cffbadc09.mokky.dev/books" method="POST" class="bookForm">
             <input name="title" @change="changeName" type="text" placeholder="Book Title">
             <input name="author" @change="changeAuthor" type="text" placeholder="Book Author">
             <input name="date" @change="changeDate" type="text" placeholder="Book publish date">
